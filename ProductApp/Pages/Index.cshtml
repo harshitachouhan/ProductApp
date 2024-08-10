@@ -1,0 +1,48 @@
+﻿@page
+@model ProductApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "Add Products";
+}
+
+<h2>Add Products</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <table id="productTable" class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="file" name="Products[0].ImageFile" accept="image/*" required /></td>
+                <td><input type="text" name="Products[0].Title" maxlength="100" required /></td>
+                <td><textarea name="Products[0].Description" maxlength="250" required></textarea></td>
+                <td><input type="number" name="Products[0].Quantity" min="1" required /></td>
+                <td><input type="date" name="Products[0].Date" required /></td>
+                <td><input type="number" name="Products[0].Price" step="0.01" required /></td>
+                <td><button type="button" onclick="addRow()">+</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" name="action" value="save">Submit</button>
+</form>
+
+<script>
+    function addRow() {
+        var table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+        var newRow = table.rows[0].cloneNode(true);
+        var rowCount = table.rows.length;
+        newRow.querySelectorAll('input, textarea').forEach((input) => {
+            input.value = '';
+            input.name = input.name.replace('[0]', '[' + rowCount + ']');
+        });
+        table.appendChild(newRow);
+    }
+</script>

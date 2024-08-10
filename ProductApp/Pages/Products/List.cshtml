@@ -1,0 +1,68 @@
+﻿@page
+@model ProductApp.Pages.Products.ListModel
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<h2>Product List</h2>
+
+<form method="get">
+    <div class="form-group">
+        <label for="SearchTitle">Title:</label>
+        <input type="text" name="SearchTitle" value="@Model.SearchTitle" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="StartDate">Start Date:</label>
+        <input type="date" name="StartDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="EndDate">End Date:</label>
+        <input type="date" name="EndDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>
+                    @if (product.ImageData != null)
+                    {
+                        <img src="data:image;base64,@Convert.ToBase64String(product.ImageData)" alt="Product Image" width="100" />
+                    }
+                </td>
+                <td>@product.Title</td>
+                <td>@product.Description</td>
+                <td>@product.Quantity</td>
+                <td>@product.Date.ToString("yyyy-MM-dd")</td>
+                <td>@product.Price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (Model.TotalPages > 1)
+    {
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" asp-page="/Products/List" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
